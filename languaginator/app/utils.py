@@ -1,13 +1,12 @@
-import openai
-from sqlalchemy.orm import Session
-from crud import update_translation_task
-from dotenv import load_dotenv
-
 import os
+from openai import OpenAI
+from sqlalchemy.orm import Session
+from app.crud import update_translation_task
 
-load_dotenv()
+from app.config import Config
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+openai = OpenAI(api_key=Config.OPENAI_API_KEY)
 
 
 def perform_translation(task_id: int, text: str, languages: list[str], db: Session):
@@ -15,12 +14,12 @@ def perform_translation(task_id: int, text: str, languages: list[str], db: Sessi
 
     for lang in languages:
         try:
-            response = openai.ChatCompletion.create(
-                model="gpt-4",
+            response = openai.chat.completions.create(
+                model="davinci-002",
                 messages=[
                     {
                         "role": "system",
-                        "content": f"You are a helpful assistant that translates text into {lang} language",
+                        "content": f"You are an helpful assistant that translates text into {lang} language",
                     },
                     {"role": "user", "content": text},
                 ],

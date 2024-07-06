@@ -117,7 +117,7 @@ https://cdn.jsdelivr.net/npm/axios@1.7.2/dist/axios.min.js
         const text = document.getElementById("textToTranslate").value;
         const languages = document.getElementById("languages").value.split(",").map(lang => lang.trim());
 
-        if (!text || languages === 0 || languages[0]) {
+        if (!text || languages === 0 || languages[0] === "") {
             alert("Please provide both text and target language");
 
             return;
@@ -133,7 +133,7 @@ https://cdn.jsdelivr.net/npm/axios@1.7.2/dist/axios.min.js
 
         try {
 
-            const response = await axios.post("localhost:8000/translate", {
+            const response = await axios.post("http://localhost:8000/translate", {
                 text:text,languages:languages
             });
 
@@ -153,7 +153,7 @@ https://cdn.jsdelivr.net/npm/axios@1.7.2/dist/axios.min.js
             while (progress < 100){
                 await new Promise( resolve => setTimeout(resolve, 1000))
 
-                const resultResponse = await axios.get(`localhost:8000/translate/${taskId}`);
+                const resultResponse = await axios.get(`http://localhost:8000/translate/${taskId}`);
 
                 translationResult = resultResponse.data;
 
